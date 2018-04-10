@@ -5,7 +5,7 @@ function Avatar(gl) {
     this.texProgram = new TexturedQuadProgram(gl, this.vsTex, this.fsTex);
 
     this.avatarTexture = new Texture2D(gl, '/textures/YadonDh.png');
-    this.avatarEyeTexture = new Texture2D(gl, '/textures/YadonDh.png');
+    this.avatarEyeTexture = new Texture2D(gl, '/textures/YadonEyeDh.png');
 
     this.material = new Material(gl, this.texProgram);
     this.material.colorTexture.set(this.avatarTexture);
@@ -16,9 +16,9 @@ function Avatar(gl) {
     this.multiMesh = new MultiMesh(gl, '/models/Slowpoke.json', [this.material, this.eyeMaterial]);
 
     this.gameObject = new GameObject(this.multiMesh);
-
-    this.gameObject.scale.set(0.1, 0.1, 0);
-    this.gameObject.position.set(-2, -1, -5);
+    this.gameObject.scale.set(0.1, 0.1, 0.1);
+    this.gameObject.rotation = Math.PI / -12;
+    this.gameObject.position.set(0, -0.5, -2.5)
 };
 
 Avatar.prototype.draw = function(camera) {
@@ -26,5 +26,5 @@ Avatar.prototype.draw = function(camera) {
 }
 
 Avatar.prototype.move = function(dt, keysPressed, camera) {
-    // this.gameObject.position.add(0.1, 0, 0);
+    // this.gameObject.rotation += 0.01;
 };
