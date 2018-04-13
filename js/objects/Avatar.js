@@ -64,10 +64,19 @@ Avatar.prototype.move = function(dt, keysPressed, camera) {
 
     if (keysPressed.D) {
         this.gameObject.yaw -= 1*dt;
+        this.wheelGO1.yaw = -0.4;
+        this.wheelGO3.yaw = -0.4;
     }
 
     if (keysPressed.A) {
         this.gameObject.yaw += 1*dt;
+        this.wheelGO1.yaw = 0.4;
+        this.wheelGO3.yaw = 0.4;
+    }
+
+    if (!keysPressed.D && !keysPressed.A) {
+        this.wheelGO1.yaw = 0;
+        this.wheelGO3.yaw = 0;
     }
 
     if(keysPressed.Q) {
