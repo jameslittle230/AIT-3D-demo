@@ -9,7 +9,7 @@ const Scene = function(gl) {
 
   this.gameObjects = [
     this.avatar,
-    // new GroundPlane(),
+    new GroundPlane(gl),
   ];
 
   this.camera = new PerspectiveCamera();
@@ -22,7 +22,7 @@ Scene.prototype.update = function(gl, keysPressed) {
   this.frameCount++;
 
   // Clear screen
-  gl.clearColor(0.61,0.47,0.15, 1);
+  gl.clearColor(1, 1, 1, 1);
   gl.clearDepth(1.0);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 

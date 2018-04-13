@@ -3,18 +3,50 @@ const GameObject = function(mesh) {
     this.mesh = mesh;
 
     this.position = new Vec3(0, 0, 0);
-    this.rotation = 0;
-    this.rotationAxes = new Vec3(0, 1, 0);
-    this.scale = new Vec3(1, 1, 0);
+    this.pitch = 0;
+    this.roll = 0;
+    this.yaw = 0;
+    this.scale = new Vec3(1, 1, 1);
 
     this.modelMatrix = new Mat4();
+
+    this.parent = null;
 };
+
+Object.defineProperty(GameObject.prototype, 'ahead', {
+    get: function() {
+        var rotationMatrix = new Mat4()
+            .rotate(this.roll, 0, 0, 1)
+            .rotate(this.pitch, 1, 0, 0)
+            .rotate(this.yaw, 0, 1, 0);
+
+        return new Vec3(0, 0, 1).xyz1times(rotationMatrix);
+    },
+});
+
+Object.defineProperty(GameObject.prototype, 'right', {
+    get: function() {
+        var rotationMatrix = new Mat4()
+            .rotate(this.roll, 0, 0, 1)
+            .rotate(this.pitch, 1, 0, 0)
+            .rotate(this.yaw, 0, 1, 0);
+
+        return new Vec3(1, 0, 0).xyz1times(rotationMatrix);
+    },
+});
 
 GameObject.prototype.updateModelMatrix = function() {
     this.modelMatrix.set()
         .scale(this.scale)
-        .rotate(this.rotation, this.rotationAxes)
+        .rotate(this.roll, 0, 0, 1)
+        .rotate(this.pitch, 1, 0, 0)
+        .rotate(this.yaw, 0, 1, 0)
         .translate(this.position);
+
+    if(this.parent != null) {
+        this.parent.updateModelMatrix();
+        this.modelMatrix.mul(this.parent.modelMatrix);
+    }
 };
 
 GameObject.prototype.draw = function(camera) {
@@ -24,9 +56,9 @@ GameObject.prototype.draw = function(camera) {
     Material.modelMatrix.set(this.modelMatrix);
 
     // Set model matrix inverse uniform
-    let modelMatrixInverse = Material.modelMatrix.clone();
+    let modelMatrixInverse = this.modelMatrix.clone();
     modelMatrixInverse.invert();
-    Material.modelMatrixInverse.set(this.modelMatrixInverse);
+    Material.modelMatrixInverse.set(modelMatrixInverse);
 
     // Set model view projection matrix uniform
     this.modelMatrix.mul(camera.viewProjMatrix);

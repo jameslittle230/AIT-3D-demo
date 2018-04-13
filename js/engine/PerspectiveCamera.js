@@ -1,6 +1,6 @@
 "use strict";
 const PerspectiveCamera = function () {
-    this.position = new Vec3(0.0, 0.0, 0.0);
+    this.position = new Vec3(0.0, 2.0, 85.0);
     this.ahead = new Vec3(0.0, 0.0, -1.0);
     this.right = new Vec3(1.0, 0.0, 0.0);
     this.up = new Vec3(0.0, 1.0, 0.0);
@@ -74,29 +74,29 @@ PerspectiveCamera.prototype.move = function (dt, keysPressed) {
         this.up.setVectorProduct(this.right, this.ahead);
     }
 
-    if (keysPressed.W) {
-        this.position.addScaled(this.speed * dt, this.ahead);
-    }
+    // if (keysPressed.W) {
+    //     this.position.addScaled(this.speed * dt, this.ahead);
+    // }
 
-    if (keysPressed.S) {
-        this.position.addScaled(-this.speed * dt, this.ahead);
-    }
+    // if (keysPressed.S) {
+    //     this.position.addScaled(-this.speed * dt, this.ahead);
+    // }
 
-    if (keysPressed.D) {
-        this.position.addScaled(this.speed * dt, this.right);
-    }
+    // if (keysPressed.D) {
+    //     this.position.addScaled(this.speed * dt, this.right);
+    // }
 
-    if (keysPressed.A) {
-        this.position.addScaled(-this.speed * dt, this.right);
-    }
+    // if (keysPressed.A) {
+    //     this.position.addScaled(-this.speed * dt, this.right);
+    // }
 
-    if (keysPressed.E) {
-        this.position.addScaled(this.speed * dt, PerspectiveCamera.worldUp);
-    }
+    // if (keysPressed.E) {
+    //     this.position.addScaled(this.speed * dt, PerspectiveCamera.worldUp);
+    // }
 
-    if (keysPressed.Q) {
-        this.position.addScaled(-this.speed * dt, PerspectiveCamera.worldUp);
-    }
+    // if (keysPressed.Q) {
+    //     this.position.addScaled(-this.speed * dt, PerspectiveCamera.worldUp);
+    // }
 
     this.updateViewMatrix();
 };
@@ -109,6 +109,11 @@ PerspectiveCamera.prototype.mouseDown = function () {
 PerspectiveCamera.prototype.mouseMove = function (event) {
     this.mouseDelta.x += event.movementX;
     this.mouseDelta.y += event.movementY;
+
+    // console.log(event.clientX);
+    // if(event.movementX < 5 || event.movementX > (window.innerWidth - 5) || event.movementY < 5 || event.movementY > (window.innerHeight - 5)) {
+    //     this.mouseUp();
+    // }
     event.preventDefault();
 };
 
