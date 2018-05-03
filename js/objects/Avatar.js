@@ -6,17 +6,22 @@ function Avatar(gl) {
 
     this.avatarTexture = new Texture2D(gl, '/textures/chevy/chevy.png');
     this.avatarEyeTexture = new Texture2D(gl, '/textures/YadonEyeDh.png');
+    this.shadowTexture = new Texture2D(gl, '/textures/shadow.png');
 
     this.material = new Material(gl, this.texProgram);
     this.material.colorTexture.set(this.avatarTexture);
+
+    this.shadowMaterial = new Material(gl, this.texProgram);
+    this.shadowMaterial.colorTexture.set(this.shadowTexture);
 
     this.eyeMaterial = new Material(gl, this.texProgram);
     this.eyeMaterial.colorTexture.set(this.avatarEyeTexture);
 
     this.multiMesh = new MultiMesh(gl, '/models/chevy/chassis.json', [this.material]);
-    this.wheelMMesh = new MultiMesh(gl, '/models/chevy/wheel.json', [this.material])
+    this.wheelMMesh = new MultiMesh(gl, '/models/chevy/wheel.json', [this.material]);
+    this.shadowMesh = new MultiMesh(gl, '/models/chevy/chassis.json', [this.shadowMaterial]);
 
-    this.gameObject = new GameObject(this.multiMesh);
+    this.gameObject = new GameObject(this.multiMesh, this.shadowMesh);
     this.gameObject.position.set(0, 5, 0);
     this.gameObject.yaw = Math.PI / 2;
 
@@ -45,7 +50,7 @@ Avatar.prototype.draw = function(camera) {
     this.wheelGO4.draw(camera);
 }
 
-Avatar.prototype.move = function(dt, keysPressed, camera) {
+Avatar.prototype.move = function(dt, framecount, keysPressed, camera) {
     if (keysPressed.W) {
         this.gameObject.position.addScaled(12*dt, this.gameObject.ahead);
         this.wheelGO1.pitch += 0.3;
@@ -79,11 +84,7 @@ Avatar.prototype.move = function(dt, keysPressed, camera) {
         this.wheelGO3.yaw = 0;
     }
 
-    if(keysPressed.Q) {
-        this.gameObject.pitch += 1*dt;
-    }
-
-    if(keysPressed.E) {
-        this.gameObject.pitch -= 1*dt;
+    if(!keysPressed.T) {
+        camera.position.set(this.gameObject.position.plus(0, 20, 125));
     }
 };

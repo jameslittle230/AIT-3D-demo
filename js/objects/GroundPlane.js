@@ -4,7 +4,7 @@ function GroundPlane(gl) {
 
     this.texProgram = new TexturedQuadProgram(gl, this.vsTex, this.fsTex);
 
-    this.groundPlaneTexture = new Texture2D(gl, '/textures/ground.jpg');
+    this.groundPlaneTexture = new Texture2D(gl, '/textures/map.jpg');
 
     this.material = new Material(gl, this.texProgram);
     this.material.colorTexture.set(this.groundPlaneTexture);
@@ -13,15 +13,13 @@ function GroundPlane(gl) {
 
     this.mesh = new Mesh(this.infiniteQuadGeometry, this.material);
 
-    this.gameObject = new GameObject(this.mesh);
-    // this.gameObject.pitch = -1 * Math.PI / 2;
-    // this.gameObject.position.set(0, -0.5, -2);
+    this.gameObject = new GameObject(this.mesh, null);
 };
 
 GroundPlane.prototype.draw = function(camera) {
     this.gameObject.draw(camera);
 }
 
-GroundPlane.prototype.move = function(dt, keysPressed, camera) {
-    // this.gameObject.pitch += dt;
+GroundPlane.prototype.move = function(dt, framecount, keysPressed, camera) {
+
 };

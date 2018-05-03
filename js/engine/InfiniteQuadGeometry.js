@@ -11,7 +11,6 @@ const InfiniteQuadGeometry = function(gl) {
          1, 0, 1, 0,
          -1, 0, 0, 0,
          1, 0, -1, 0,
-
     ]),
     gl.STATIC_DRAW);
 

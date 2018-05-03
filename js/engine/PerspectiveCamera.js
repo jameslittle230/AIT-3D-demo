@@ -1,6 +1,7 @@
 "use strict";
 const PerspectiveCamera = function () {
     this.position = new Vec3(0.0, 20.0, 85.0);
+    this.originalPosition = new Vec3();
     this.ahead = new Vec3(0.0, 0.0, -1.0);
     this.right = new Vec3(1.0, 0.0, 0.0);
     this.up = new Vec3(0.0, 1.0, 0.0);
@@ -15,6 +16,7 @@ const PerspectiveCamera = function () {
     this.speed = 0.5;
 
     this.isDragging = false;
+    this.trackingFirstFrame = true;
     this.mouseDelta = new Vec2(0.0, 0.0);
 
     this.viewMatrix = new Mat4();
@@ -51,6 +53,29 @@ PerspectiveCamera.prototype.updateProjMatrix = function () {
 };
 
 PerspectiveCamera.prototype.move = function (dt, keysPressed) {
+    if(keysPressed.T) {
+        if(this.trackingFirstFrame) {
+            console.log("First frame of tracking shot");
+            this.trackingFirstFrame = false;
+            this.originalPosition.set(this.position);
+            this.position.set(this.originalPosition.plus(-25, 5, 0));
+        }
+
+        console.log("Another frame of tracking shot");
+        this.position.add(dt*5, dt*-1, 0);
+
+        if(this.position.y < 0.1) {
+            this.position.set(this.originalPosition.plus(-25, 5, 0));
+        }
+    }
+
+    if(!keysPressed.T) {
+        if(!this.trackingFirstFrame) {
+            console.log("Last frame of tracking shot");
+            this.trackingFirstFrame = true;
+            this.position.set(this.originalPosition);
+        }
+    }
     if (this.isDragging) {
         this.yaw -= this.mouseDelta.x * 0.002;
         this.pitch -= this.mouseDelta.y * 0.002;
@@ -73,30 +98,6 @@ PerspectiveCamera.prototype.move = function (dt, keysPressed) {
         this.right.normalize();
         this.up.setVectorProduct(this.right, this.ahead);
     }
-
-    // if (keysPressed.W) {
-    //     this.position.addScaled(this.speed * dt, this.ahead);
-    // }
-
-    // if (keysPressed.S) {
-    //     this.position.addScaled(-this.speed * dt, this.ahead);
-    // }
-
-    // if (keysPressed.D) {
-    //     this.position.addScaled(this.speed * dt, this.right);
-    // }
-
-    // if (keysPressed.A) {
-    //     this.position.addScaled(-this.speed * dt, this.right);
-    // }
-
-    // if (keysPressed.E) {
-    //     this.position.addScaled(this.speed * dt, PerspectiveCamera.worldUp);
-    // }
-
-    // if (keysPressed.Q) {
-    //     this.position.addScaled(-this.speed * dt, PerspectiveCamera.worldUp);
-    // }
 
     this.updateViewMatrix();
 };
